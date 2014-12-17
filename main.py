@@ -290,14 +290,14 @@ for i in range(height):
 
 
 # Let R be the communication radius of each robot
-R = 15
+R = 5
 # Let baseX and baseY be the coordinates of the base station
-baseX = 0
-baseY = 0
+baseX = 4
+baseY = 4
 
 
 # Run the following instructions for T time steps
-T = 200
+T = 500
 for t in range(T):
 
 	# Get a list of the current frontier cells
@@ -322,24 +322,26 @@ for t in range(T):
 		else:
 			newcmd = generateRandomCfg(numRobots)
 		cfgc.append(newcmd)
-		print newcmd
+		# print newcmd
 		newcfg = computeNewCfg(newcmd)
-		# print newcfg
+		print 'newcfg', newcfg
 		# Now we compute the utility of this configuration
 		if newcfg == -1:
 			# We use a temporary variable to store the utility
 			util = -3 * numRobots
 			# We then append it to the global list of utilities
 			utility.append(util)
+			print newcfg, '-1'
 			# print 'Impossible configuration'
 		else:
 			# print newcfg
 			# We now determine if there is a possible loss of communication in this configuration
 			lossFlag = False
-			for cfg in newcfg:
-				dist = math.sqrt(((cfg[0]-baseX)*(cfg[0]-baseX)) + ((cfg[1]- baseY)*(cfg[1]-baseY)))
+			for ncfg in newcfg:
+				dist = math.sqrt(((ncfg[0]-baseX)*(ncfg[0]-baseX)) + ((ncfg[1]- baseY)*(ncfg[1]-baseY)))
 				if dist > R:
 					lossFlag = True
+				print '####', ncfg, 'dist:', dist
 			if lossFlag == True:
 				util = -3 * numRobots
 				utility.append(util)
@@ -347,6 +349,7 @@ for t in range(T):
 			else:
 				# In this case the utility is equal to the Manhattan distance of the nearest frontier point
 				# print 'Manhattan distance'
+				print cfgc[i], 'dist:', dist
 			
 				# Get the closest point on the frontier (for each robot)
 				for i in range(numRobots):
@@ -379,6 +382,8 @@ for t in range(T):
 	sortedIndices = [i[0] for i in sorted(enumerate(utility), key = lambda x:x[1], reverse = True)]
 	print 'sortedIndices:', sortedIndices
 	selectedCmd = sortedIndices[0]
+	if utility[sortedIndices[0]] == -3 * numRobots:
+		selectedCmd = k-1
 	print 'selectedCmd:', selectedCmd, cfgc[selectedCmd]
 
 	# Pass on the selected commands to the robots
