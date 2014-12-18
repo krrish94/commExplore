@@ -28,10 +28,12 @@
 import math
 import random
 import sys
+import Tkinter
 
 # Importing own modules
 import Grid
 import Robot
+import ReadCfgFile
 
 
 # Generates a random configuration change (set of commands) for each robots
@@ -240,16 +242,49 @@ def getFrontierCells():
 
 
 # Defining variables to store the height and width of the grid
+
+if len(sys.argv) != 4:
+	print 'Invalid usage!'
+	print 'Usage:	$ python main.py <configurationFile> <k> <T>'
+	print 'k and T can be set to 10 and 200 respectively'
+
+configurationFile = sys.argv[1]
+
 height = 10
 width = 10
 # Defining a variable to hold a very large value
 inf = 1000000000
+
+# Let R be the communication radius of each robot
+R = 5
+# Let baseX and baseY be the coordinates of the base station
+baseX = 4
+baseY = 4
+
+k = int(sys.argv[2])
+T = int(sys.argv[3])
+
+ret, height, width, numRobots, R, baseX, baseY, initLocs, obstacles = ReadCfgFile.readCfg()
+
+if ret == -1:
+	print 'readCfg() Unsuccessful!'
+	sys.exit(-1)
+
+print 'height', height
+print 'width', width
+print 'numRobots', numRobots
+print 'R', R
+print 'baseX', baseX
+print 'baseY', baseY
+print 'initLocs', initLocs
+print 'obstacles', obstacles
+
 # obstacles = [[0, 0], [1, 1],[2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8]]
-obstacles = [[0, 0], [1, 0],[2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8]]
+# obstacles = [[0, 0], [1, 0],[2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8]]
 grid = Grid.Grid(height, width, obstacles)
-initLocs = [[0, 9], [8, 9]]
+# initLocs = [[0, 9], [8, 9]]
 	
-numRobots = 2
+# numRobots = 2
 robot = [Robot.Robot(j+1, -1, -1, -1) for j in range(numRobots)]
 
 # robotID = 1
@@ -289,15 +324,12 @@ for i in range(height):
 	sys.stdout.write("\n")
 
 
-# Let R be the communication radius of each robot
-R = 5
-# Let baseX and baseY be the coordinates of the base station
-baseX = 4
-baseY = 4
+# Code for the GUI
+# top = Tkinter.Tk()
+# top.mainloop()
 
 
 # Run the following instructions for T time steps
-T = 500
 for t in range(T):
 
 	# Get a list of the current frontier cells
@@ -311,7 +343,7 @@ for t in range(T):
 	# Generate k random configuration changes (cfgc)
 	# For each cfgc, compute the new config (cfg), the utility of the cfg
 	# Also, store the cfgc with the max utility
-	k = 10
+	# k = 10 was the value in most test cases
 	cfgc = []
 	utility = []
 	for i in range(k):
