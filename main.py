@@ -319,7 +319,13 @@ for bot in robot:
 for i in range(height):
 	for j in range(width):
 		# print grid.cells[i][j].status
-		sys.stdout.write(str(grid.cells[i][j].status))
+		if grid.cells[i][j].status == -1:
+			sys.stdout.write("-1")
+		else:
+			temp = str(grid.cells[i][j].status)
+			temp = ' ' + temp
+			sys.stdout.write(temp)
+		# sys.stdout.write(str(grid.cells[i][j].status))
 		sys.stdout.write(" ")
 	sys.stdout.write("\n")
 
@@ -426,7 +432,13 @@ for t in range(T):
 		for i in range(height):
 			for j in range(width):
 				# print grid.cells[i][j].status
-				sys.stdout.write(str(grid.cells[i][j].status))
+				if grid.cells[i][j].status == True:
+					sys.stdout.write("-1")
+				else:
+					temp = str(grid.cells[i][j].status)
+					temp = ' ' + temp
+					sys.stdout.write(temp)
+				# sys.stdout.write(str(grid.cells[i][j].status))
 				sys.stdout.write(" ")
 			sys.stdout.write("\n")
 
