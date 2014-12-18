@@ -75,19 +75,19 @@ def readCfg():
 	return 0, height, width, numRobots, R, baseX, baseY, initLocs, obstacles
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-	ret, height, width, numRobots, R, baseX, baseY, initLocs, obstacles = readCfg()
+# 	ret, height, width, numRobots, R, baseX, baseY, initLocs, obstacles = readCfg()
 
-	if ret == -1:
-		print 'readCfg() Unsuccessful!'
-		sys.exit(-1)
+# 	if ret == -1:
+# 		print 'readCfg() Unsuccessful!'
+# 		sys.exit(-1)
 
-	print 'height', height
-	print 'width', width
-	print 'numRobots', numRobots
-	print 'R', R
-	print 'baseX', baseX
-	print 'baseY', baseY
-	print 'initLocs', initLocs
-	print 'obstacles', obstacles
+# 	print 'height', height
+# 	print 'width', width
+# 	print 'numRobots', numRobots
+# 	print 'R', R
+# 	print 'baseX', baseX
+# 	print 'baseY', baseY
+# 	print 'initLocs', initLocs
+# 	print 'obstacles', obstacles
