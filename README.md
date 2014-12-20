@@ -6,7 +6,9 @@ An implementation of the paper "Multi-Robot Exploration Under the Constraints of
 
 In order to run the code, dowload all the files in the repository and execute
 
-    $ python main.py
+    $ python main.py gridworld1.config 10 100
+
+For a better understanding of the commandline arguments or creating a configuration file of your own, refer to main.py and gridworld1.config
 
 The following variables would be of particular interest to those who wish to test the implementation in various scenarios.
 
