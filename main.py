@@ -142,7 +142,16 @@ def computeNewCfg(newcmd):
 	if infeasibleFlag == True:
 		return -1
 	else:
-		return newcfg
+		# print '### newcfg:', newcfg
+		# Now check if the config is such that 2 robots occupy the same new cell
+		# For the same we can check if newcfg has any duplicate entries
+		# We use the python function 'any' to do the same
+		if any(newcfg.count(element) > 1 for element in newcfg) == True:
+			return -1
+		# Otherwise, this configuration is possible (for now)
+		# We'll have to check whether it satisfies the communication constraint, though.
+		else: 
+			return newcfg
 
 
 # Get the 8-neighbors of the given cell (Used in computing the frontier cells)
@@ -362,7 +371,7 @@ for t in range(T):
 		cfgc.append(newcmd)
 		# print newcmd
 		newcfg = computeNewCfg(newcmd)
-		print 'newcfg', newcfg
+		# print 'newcfg', newcfg
 		# Now we compute the utility of this configuration
 		if newcfg == -1:
 			# We use a temporary variable to store the utility
@@ -379,7 +388,7 @@ for t in range(T):
 				dist = math.sqrt(((ncfg[0]-baseX)*(ncfg[0]-baseX)) + ((ncfg[1]- baseY)*(ncfg[1]-baseY)))
 				if dist > R:
 					lossFlag = True
-				print '####', ncfg, 'dist:', dist
+				# print '####', ncfg, 'dist:', dist
 			if lossFlag == True:
 				util = -3 * numRobots
 				utility.append(util)
@@ -387,7 +396,7 @@ for t in range(T):
 			else:
 				# In this case the utility is equal to the Manhattan distance of the nearest frontier point
 				# print 'Manhattan distance'
-				print cfgc[i], 'dist:', dist
+				# print cfgc[i], 'dist:', dist
 			
 				# Get the closest point on the frontier (for each robot)
 				for i in range(numRobots):
@@ -432,7 +441,7 @@ for t in range(T):
 		for i in range(height):
 			for j in range(width):
 				# print grid.cells[i][j].status
-				if grid.cells[i][j].status == True:
+				if grid.cells[i][j].status == -1:
 					sys.stdout.write("-1")
 				else:
 					temp = str(grid.cells[i][j].status)
@@ -447,12 +456,25 @@ print '---------------------'
 print 'Final coverage status'
 print '---------------------'
 # Print the status of the cells (1 if the cell has been visited, 0 otherwise)
+# While doing so, also keep a track of the number of cells that are not obstacles
+# because, % cells covered = (total no of cells visited / total no of cells that are not obstacles)
+visitableCells = height * width
+visitedCells = 0
+
 for i in range(height):
 	for j in range(width):
 		# print grid.cells[i][j].status
 		if grid.cells[i][j].visited == True:
 			sys.stdout.write("1")
+			visitedCells += 1
 		else:
 			sys.stdout.write("0")
+			if grid.cells[i][j].status == -1:
+				visitableCells -= 1
 		sys.stdout.write(" ")
 	sys.stdout.write("\n")
+sys.stdout.write("\n")
+
+visitPercentage = ((visitedCells / visitableCells) * 100.0)
+print 'Percentage (%) of cells visited :', visitPercentage
+print 'Percentage (%) of cells unvisited :', 100.0 - visitPercentage
