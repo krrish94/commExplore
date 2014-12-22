@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 
-# Copyright (c) 2014 Krishna Murthy
+# Copyright (c) 2014 INSPIRE Lab, BITS Pilani
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,16 @@
 # SOFTWARE.
 
 
+"""Class to hold a grid cell"""
 
+
+# The Cell class
 class Cell(object):
-	"""Class to hold a grid cell"""
 
 	def __init__(self, x, y):
 
 		self.x = x
 		self.y = y
-		self.status = 0
+		self.occupied = False
+		self.obstacle = False
 		self.visited = False
-		# print self.x, self.y

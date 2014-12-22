@@ -21,20 +21,57 @@
 # SOFTWARE.
 
 
-"""Class to hold a robot"""
+"""
+Provides a demo of the Communicative Exploration algorithm for a fixed base station.
+"""
 
 
-# The robot class
-class Robot:
-
-	def __init__(self, id, curX, curY):
-
-		self.id = id
-		self.curX = curX
-		self.curY = curY
+import AStar
+import CommExplore
+import ConfigFileReader
+import GridUI
 
 
-	def setLocation(self, curX, curY):
+def main():
 
-		self.curX = curX
-		self.curY = curY
+	cfgReader = ConfigFileReader.ConfigFileReader("freeworld.config")
+	ret, height, width, numRobots, R, baseX, baseY, initLocs, obstacles = cfgReader.readCfg()
+	if ret == -1:
+		print 'readCfg() Unsuccessful!'
+		sys.exit(-1)
+
+	print 'height', height
+	print 'width', width
+	print 'numRobots', numRobots
+	print 'R', R
+	print 'baseX', baseX
+	print 'baseY', baseY
+	print 'initLocs', initLocs
+	print 'obstacles', obstacles
+
+	k = 10
+	T = 1000
+
+	algo = CommExplore.CommExplore(height, width, obstacles, numRobots, initLocs, R, k)
+	algo.printGrid()
+	print ''
+	print ''
+	cfgc = algo.generateCfgcPopulation()
+
+	for j in range(T):
+		algo.runOneIter()
+
+	timeTaken = algo.printVisitedStatus()
+	if timeTaken == 0:
+		return T
+	return timeTaken
+
+
+if __name__ == '__main__':
+
+	numTrials = 10
+	average = 0
+	for i in range(numTrials):
+		average += main()
+	average /= numTrials
+	print average

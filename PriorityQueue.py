@@ -21,20 +21,36 @@
 # SOFTWARE.
 
 
-"""Class to hold a robot"""
+"""
+Provides an implementation of a reasonably fast Priority Queue that uses binary heaps.
+But, this implementation does not support reprioritization.
+"""
 
 
-# The robot class
-class Robot:
-
-	def __init__(self, id, curX, curY):
-
-		self.id = id
-		self.curX = curX
-		self.curY = curY
+import heapq
 
 
-	def setLocation(self, curX, curY):
+# The PriorityQueue class
+class PriorityQueue:
 
-		self.curX = curX
-		self.curY = curY
+	def __init__(self):
+
+		self.elements = []
+
+
+	# Method to see if the queue is empty
+	def isEmpty(self):
+
+		return len(self.elements) == 0
+
+
+	# Method to push an item into the queue
+	def put(self, item, priority):
+
+		heapq.heappush(self.elements, (priority, item))
+
+
+	# Method to pop an item (having the lowest value of priority) from the queue
+	def get(self):
+
+		return heapq.heappop(self.elements)[1]
