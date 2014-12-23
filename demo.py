@@ -26,6 +26,11 @@ Provides a demo of the Communicative Exploration algorithm for a fixed base stat
 """
 
 
+from math import floor
+from time import sleep
+from Tkinter import Tk, Canvas, Frame, BOTH
+
+
 import AStar
 import CommExplore
 import ConfigFileReader
@@ -34,7 +39,7 @@ import GridUI
 
 def main():
 
-	cfgReader = ConfigFileReader.ConfigFileReader("freeworld.config")
+	cfgReader = ConfigFileReader.ConfigFileReader("barmaze.config")
 	ret, height, width, numRobots, R, baseX, baseY, initLocs, obstacles = cfgReader.readCfg()
 	if ret == -1:
 		print 'readCfg() Unsuccessful!'
@@ -58,20 +63,55 @@ def main():
 	print ''
 	cfgc = algo.generateCfgcPopulation()
 
-	for j in range(T):
-		algo.runOneIter()
+	# for j in range(T):
+	# 	algo.runOneIter()
 
-	timeTaken = algo.printVisitedStatus()
-	if timeTaken == 0:
-		return T
-	return timeTaken
+	# timeTaken = algo.printVisitedStatus()
+	# if timeTaken == 0:
+	# 	return T
+	# return timeTaken
+
+	if height <= 10:
+		xoffset = 300
+	else:
+		xoffset = 100
+	if width <= 10:
+		yoffset = 300
+	else:
+		yoffset = 100
+
+	maxScreenHeight = 700
+	cellSize = int(floor(maxScreenHeight / (height + 2)))
+
+	root = Tk()
+	# ex = Example(root)
+	# root.geometry('400x100+500+500')
+	# root.mainloop()
+
+	gui = GridUI.GridUI(root, height, width, cellSize, algo.gridworld, algo.robots, algo.frontier)
+	guiHeight = str((height + 2) * cellSize)
+	guiWidth = str((width + 2) * cellSize)
+	xOffset = str(xoffset)
+	yOffset = str(yoffset)
+	geometryParam = guiWidth + 'x' + guiHeight + '+' + xOffset + '+' + yOffset
+	root.geometry(geometryParam)
+
+	def run():
+
+		algo.runOneIter()
+		gui.redraw(height, width, cellSize, algo.gridworld, algo.robots, algo.frontier)
+		root.after(50, run)
+
+	root.after(50, run)
+	root.mainloop()
 
 
 if __name__ == '__main__':
 
-	numTrials = 10
-	average = 0
-	for i in range(numTrials):
-		average += main()
-	average /= numTrials
-	print average
+	# numTrials = 10
+	# average = 0
+	# for i in range(numTrials):
+	# 	average += main()
+	# average /= numTrials
+	# print average
+	main()

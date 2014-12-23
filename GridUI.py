@@ -48,7 +48,7 @@ class GridUI(Frame):
 		self.parent.title('Grid')
 		self.pack(fill = BOTH, expand = 1)
 
-		canvas = Canvas(self)
+		self.canvas = Canvas(self)
 
 		startX = cellSize
 		startY = cellSize
@@ -69,23 +69,23 @@ class GridUI(Frame):
 			for robot in robots:
 				if robot.curX == xIdx and robot.curY == yIdx:
 					robotFlag = True
-					canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FF00', width = 2)
+					self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FF00', width = 2)
 			# Then check if it corresponds to an obstacle
 			if grid.cells[xIdx][yIdx].obstacle == True:
-				canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#000000', width = 2)	
+				self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#000000', width = 2)	
 			elif robotFlag == False:
 				# Then check if it corresponds to a frontier cell
 				frontierFlag = False
 				for pt in frontier:
 					if pt[0] == xIdx and pt[1] == yIdx:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FFFF', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FFFF', width = 2)
 						frontierFlag = True
 
 				if frontierFlag == False:
 					if grid.cells[xIdx][yIdx].visited == True:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#FFFFFF', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#FFFFFF', width = 2)
 					else:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#777777', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#777777', width = 2)
 			
 			curX = curX + cellSize
 			if curX == endX and curY != endY:
@@ -100,7 +100,7 @@ class GridUI(Frame):
 			rectIdx += 1
 			yIdx += 1
 
-		canvas.pack(fill = BOTH, expand = 1)
+		self.canvas.pack(fill = BOTH, expand = 1)
 
 
 	# Method to redraw the positions of the robots and the frontier
@@ -109,7 +109,9 @@ class GridUI(Frame):
 		self.parent.title('Grid2')
 		self.pack(fill = BOTH, expand = 1)
 
-		canvas = Canvas(self.parent)
+		# canvas = Canvas(self.parent)
+
+		self.canvas.delete('all')
 
 		startX = cellSize
 		startY = cellSize
@@ -130,23 +132,23 @@ class GridUI(Frame):
 			for robot in robots:
 				if robot.curX == xIdx and robot.curY == yIdx:
 					robotFlag = True
-					canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FF00', width = 2)
+					self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FF00', width = 2)
 			# Then check if it corresponds to an obstacle
 			if grid.cells[xIdx][yIdx].obstacle == True:
-				canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#000000', width = 2)	
+				self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#000000', width = 2)	
 			elif robotFlag == False:
 				# Then check if it corresponds to a frontier cell
 				frontierFlag = False
 				for pt in frontier:
 					if pt[0] == xIdx and pt[1] == yIdx:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FFFF', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#00FFFF', width = 2)
 						frontierFlag = True
 
 				if frontierFlag == False:
 					if grid.cells[xIdx][yIdx].visited == True:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#FFFFFF', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#FFFFFF', width = 2)
 					else:
-						canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#777777', width = 2)
+						self.canvas.create_rectangle(curX, curY, curX + cellSize, curY + cellSize, outline = '#0000FF', fill = '#777777', width = 2)
 			
 			curX = curX + cellSize
 			if curX == endX and curY != endY:
@@ -161,48 +163,4 @@ class GridUI(Frame):
 			rectIdx += 1
 			yIdx += 1
 
-		canvas.pack(fill = BOTH, expand = 1)
-
-
-def main():
-
-	height = 10
-	width = 10
-
-	if height <= 10:
-		xoffset = 300
-	else:
-		xoffset = 100
-	if width <= 10:
-		yoffset = 300
-	else:
-		yoffset = 100
-
-	maxScreenHeight = 700
-	cellSize = int(floor(maxScreenHeight / (height + 2)))
-
-	root = Tk()
-	# ex = Example(root)
-	# root.geometry('400x100+500+500')
-	# root.mainloop()
-
-	gui = GridUI(root, height, width, cellSize, [], [])
-	guiHeight = str((height + 2) * cellSize)
-	guiWidth = str((width + 2) * cellSize)
-	xOffset = str(xoffset)
-	yOffset = str(yoffset)
-	geometryParam = guiWidth + 'x' + guiHeight + '+' + xOffset + '+' + yOffset
-	root.geometry(geometryParam)
-
-	# def hello():
-
-	# 	print 'Hello'
-	# 	root.after(500, hello)
-
-	# root.after(500, hello)
-	root.mainloop()
-
-
-if __name__ == '__main__':
-	
-	main()
+		self.canvas.pack(fill = BOTH, expand = 1)
